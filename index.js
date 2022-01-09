@@ -4,9 +4,42 @@ const prisma = new PrismaClient();
 
 async function main() {
 	// wrtie Prisma Client query here
-	const allUsers = await prisma.user.findMany();
+	
+  //createTest();
+  updateTest();
+
+	// include schema into the result
+	const allUsers = await prisma.user.findMany({
+		include: {
+			posts: true,
+			profile: true,
+		},
+	});
 	console.log(allUsers);
 }
+
+const createTest = async () => {
+	await prisma.user.create({
+		data: {
+			name: 'Tester',
+			email: 'test@prisma.io',
+			posts: {
+				create: { title: 'Sample Text' },
+			},
+			profile: {
+				create: { bio: 'This is biography' },
+			},
+		},
+	});
+};
+
+const updateTest = async () => {
+	const post = await prisma.post.update({
+		where: { id: 1 },
+		data: { published: true },
+	});
+  console.log(post);
+};
 
 main()
 	.catch((e) => {
