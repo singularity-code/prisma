@@ -5,11 +5,13 @@ const prisma = new PrismaClient();
 async function main() {
 	// wrtie Prisma Client query here
 
-	//createTest();
-	//updateTest();
+	findUsers();
+	// createTest();
+	updateTest();
 	countPublished();
+}
 
-	// include schema into the result
+const findUsers = async () => {
 	const allUsers = await prisma.user.findMany({
 		include: {
 			posts: true,
@@ -17,7 +19,7 @@ async function main() {
 		},
 	});
 	console.log(allUsers);
-}
+};
 
 const createTest = async () => {
 	await prisma.user.create({
@@ -36,7 +38,7 @@ const createTest = async () => {
 
 const updateTest = async () => {
 	const post = await prisma.post.update({
-		where: { id: 1 },
+		where: { id: 2 },
 		data: { published: true },
 	});
 	console.log(post);
@@ -45,8 +47,8 @@ const updateTest = async () => {
 const countPublished = async () => {
 	const p = await prisma.post.count({
 		where: {
-			published : true
-		}
+			published: true,
+		},
 	});
 	console.log(p);
 };
